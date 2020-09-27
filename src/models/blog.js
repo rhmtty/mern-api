@@ -14,8 +14,6 @@ const BlogPost = new schema({
         type: Object,
         required: true
     }
-}, {
-    timestamps: true
-});
+}, {timestamps: true});
 
 module.exports = mongoose('BlogPost', BlogPost);
