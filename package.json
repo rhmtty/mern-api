@@ -8,8 +8,11 @@
     "npm": "6.x"
   },
   "scripts": {
-    "start": "node index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm install npm && run build"
+    "start": "NODE_ENV=development webpack-dev-server",
+    "build": "NODE_ENV=production webpack",
+    "stage": "NODE_ENV=staging webpack",
+    "test": "NODE_ENV=testing jest --watchAll --coverage",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
   },
   "author": "rhmt ty",
   "license": "ISC",
