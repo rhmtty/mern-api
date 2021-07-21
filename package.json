@@ -11,8 +11,7 @@
     "start": "NODE_ENV=development webpack-dev-server",
     "build": "NODE_ENV=production webpack",
     "stage": "NODE_ENV=staging webpack",
-    "test": "NODE_ENV=testing jest --watchAll --coverage",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "test": "NODE_ENV=testing jest --watchAll --coverage"
   },
   "author": "rhmt ty",
   "license": "ISC",
