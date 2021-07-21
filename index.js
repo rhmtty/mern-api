@@ -53,6 +53,6 @@ app.use((error, req, res, next) => {
 
 mongoose.connect('mongodb+srv://ty:N4CaHzF0IYlwcilk@cluster0.jn99b.mongodb.net/blog?retryWrites=true&w=majority')
 .then(() => {
-    app.listen(4000, () => console.log('Connection Success'))
+    app.listen(process.env.PORT || 4000, () => console.log('Connection Success'))
 })
 .catch(err => console.log('err', err))
