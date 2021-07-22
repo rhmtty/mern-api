@@ -1,14 +1,16 @@
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'index.js'),
+  target: 'node',
+  entry: './index.js',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
   },
   mode: 'production',
-  node: {
-    fs: 'empty',
-    net: 'empty'
-  }
-};
+  resolveLoader: {
+    modules: [
+      __dirname, '/node_modules/'
+    ]
+  },
+}

@@ -8,7 +8,7 @@ const app = express()
 
 const authRoutes = require('./src/routes/auth')
 const blogRoutes = require('./src/routes/blog')
-const { static } = require('express')
+// const { static } = require('express')
 
 // Tentukan folder penyimpanan
 const fileStorage = multer.diskStorage({
@@ -53,6 +53,7 @@ app.use((error, req, res, next) => {
 
 mongoose.connect('mongodb+srv://ty:N4CaHzF0IYlwcilk@cluster0.jn99b.mongodb.net/blog?retryWrites=true&w=majority')
 .then(() => {
-    app.listen(process.env.PORT || 4000, () => console.log('Connection Success'))
+    const port = process.env.PORT || 4000
+    app.listen(port, () => console.log('Connection Success', port))
 })
 .catch(err => console.log('err', err))
