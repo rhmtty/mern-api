@@ -24,6 +24,8 @@
     "mongodb-client-encryption": "^1.2.6",
     "mongoose": "^5.10.7",
     "multer": "^1.4.2",
+    "netlify-cli": "^5.2.2",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.4"
   },
   "devDependencies": {
