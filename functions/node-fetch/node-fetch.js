@@ -1,29 +1,65 @@
 const fetch = require('node-fetch')
 
-const handler = async function () {
-  try {
-    const response = await fetch('./server.js', {
-      headers: { Accept: 'application/json' },
-    })
-    if (!response.ok) {
-      // NOT res.status >= 200 && res.status < 300
-      return { statusCode: response.status, body: response.statusText }
-    }
-    const data = await response.json()
+const handler = function () {
+  const express = require('express')
+  const bodyParser = require('body-parser')
+  const mongoose = require('mongoose')
+  const multer = require('multer')
+  const path = require('path')
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ msg: data.joke }),
-    }
-  } catch (error) {
-    // output to netlify function log
-    console.log(error)
-    return {
-      statusCode: 500,
-      // Could be a custom message or object i.e. JSON.stringify(err)
-      body: JSON.stringify({ msg: error.message }),
-    }
+  const app = express()
+
+  const authRoutes = require('./src/routes/auth')
+  const blogRoutes = require('./src/routes/blog')
+  // const { static } = require('express')
+
+  // Tentukan folder penyimpanan
+  const fileStorage = multer.diskStorage({
+      destination: (req, file, cb) => {
+          cb(null, 'images');
+      },
+      filename: (req, file, cb) => {
+          cb(null, new Date().getTime() + '-' + file.originalname);
+      }
+  })
+
+  // filter file yang boleh di upload
+  const fileFilter = (req, file, cb) => {
+      if(file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpeg'){
+          cb(null, true)
+      } else{
+          cb(null, false)
+      }
   }
+
+  app.use(bodyParser.json()) // menerima JSON
+  app.use('/images', express.static(path.join(__dirname, 'images')))
+  app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'))
+
+  app.use((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+      next()
+  })
+
+  app.use('/v1/auth', authRoutes)
+  app.use('/v1/blog', blogRoutes)
+
+  app.use((error, req, res, next) => {
+      const status = error.errorStatus || 500;
+      const message = error.message;
+      const data = error.data;
+
+      res.status(status).json({message: message, data: data})
+  })
+
+  mongoose.connect('mongodb+srv://ty:N4CaHzF0IYlwcilk@cluster0.jn99b.mongodb.net/blog?retryWrites=true&w=majority')
+  .then(() => {
+      const port = process.env.PORT || 4000
+      app.listen(port, () => console.log('Connection Success', port))
+  })
+  .catch(err => console.log('err', err))
 }
 
 module.exports = { handler }
