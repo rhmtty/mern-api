@@ -12,4 +12,15 @@ module.exports = {
   resolveLoader: {
     modules: [__dirname, "/node_modules/"],
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "images"),
+          to: path.resolve(__dirname, "dist"),
+          noErrorOnMissing: true,
+        },
+      ],
+    }),
+  ],
 };
